@@ -3,32 +3,51 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
-public class PetSprite {
-    private BufferedImage spriteSheet;  // The full sprite sheet image
-    private BufferedImage currentSprite;  // The currently displayed sprite
-    private String petType;             // "bowser", "cat", "dog", or "ryu"
-    private String currentState;        // e.g., "normal", "sleeping", "angry", "hungry", "speaking", "dead"
-    private boolean flipped = false;    // Flag for horizontal flip
+/**
+ * Class handling pet sprite images and animations
+ * <br><br>
+ * This class opens the sprites and displays them on the screen. Additionally, the pet's states will be displayed. The selected pet will be displayed during gameplay.<br><br>
+ * 
+ * @version 1.0
+ * @author Elmar
+ */
 
-    // Constructor: given the pet type, load the correct sprite sheet.
+public class PetSprite {
+	//* Private variable for he full sprite sheet image */
+    private BufferedImage spriteSheet;
+    //* Private variable for the currently displayed sprite */
+    private BufferedImage currentSprite;
+    //* Private variable for either"bowser", "cat", "dog", or "ryu" */
+    private String petType;
+    //* Private variable for states e.g., "normal", "sleeping", "angry", "hungry", "speaking", "dead" */
+    private String currentState;
+    //* Private variable for flag for horizontal flip */
+    private boolean flipped = false;
+
+    /**
+     * Constructor: given the pet type, load the correct sprite sheet.
+     * 
+     * @param petType defines the type of pet
+     * @throw an exception if the pet sprite cannot be displayed on the screen
+     */
     public PetSprite(String petType) {
         this.petType = petType.toLowerCase();
         String filePath = "";
         switch (this.petType) {
             case "bowser":
-                filePath = "C:\\Users\\Auntic\\2212_Git_Repos\\group74\\group74\\GroupProject\\src\\Sprites\\Bowser Sprite.png";
+                filePath = "Sprites" + File.separator + "Bowser Sprite.png";
                 break;
             case "cat":
-                filePath = "C:\\Users\\Auntic\\2212_Git_Repos\\group74\\group74\\GroupProject\\src\\Sprites\\Cat Sprite.png";
+                filePath = "Sprites" + File.separator + "Cat Sprite.png";
                 break;
             case "dog":
-                filePath = "C:\\Users\\Auntic\\2212_Git_Repos\\group74\\group74\\GroupProject\\src\\Sprites\\Dog Sprite.png";
+                filePath = "Sprites" + File.separator + "Dog Sprite.png";
                 break;
             case "ryu":
-                filePath = "C:\\Users\\Auntic\\2212_Git_Repos\\group74\\group74\\GroupProject\\src\\Sprites\\Ryu Sprite.png";
+                filePath = "Sprites" + File.separator + "Ryu Sprite.png";
                 break;
             default:
-                filePath = "C:\\Users\\Auntic\\2212_Git_Repos\\group74\\group74\\GroupProject\\src\\Sprites\\Bowser Sprite.png";
+                filePath = "Sprites" + File.separator + "Bowser Sprite.png";
                 break;
         }
         try {
@@ -53,13 +72,21 @@ public class PetSprite {
         setStatus("normal");
     }
 
-    // Sets the current state (e.g., "normal", "sleeping", etc.) and updates the sprite.
+    /**
+     * Sets the current state (e.g., "normal", "sleeping", etc.) and updates the sprite.
+     * 
+     * @param status the current state of the pet
+     */
     public void setStatus(String status) {
         currentState = status;
         updateSprite();
     }
 
-    // Updates the currentSprite using the correct coordinates/dimensions for the pet type and state.
+    /**
+     * Updates the currentSprite using the correct coordinates/dimensions for the pet type and state.
+     * 
+     * @throw an exception if the sprite cannot be updated to reflect its current state
+     */
     private void updateSprite() {
         int x = 0, y = 0, w = 0, h = 0;
         String state = currentState.toLowerCase();
@@ -178,12 +205,18 @@ public class PetSprite {
         }
     }
 
-    // Toggles the flipped flag.
+    /**
+     * Toggles the flipped flag.
+     */
     public void toggleFlip() {
         flipped = !flipped;
     }
 
-    // Returns the sprite image that should be displayed (flipped if needed).
+    /**
+     * Returns the sprite image that should be displayed (flipped if needed).
+     * 
+     * @return the displayed sprite on the screen, can be flipped horizontally
+     */
     public BufferedImage getDisplayedSprite() {
         if (!flipped) {
             return currentSprite;
@@ -199,8 +232,14 @@ public class PetSprite {
         }
     }
 
-    // Returns the current (non-flipped) sprite image.
+    /**
+     * Returns the current (non-flipped) sprite image.
+     * @return the current sprite
+     */
     public BufferedImage getCurrentSprite() {
         return currentSprite;
     }
 }
+
+
+

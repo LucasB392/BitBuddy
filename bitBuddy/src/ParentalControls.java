@@ -1,11 +1,33 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.swing.*;
 
+/**
+ * Parental control functions
+ * <br><br>
+ * This class contains all the functions for parental controls, it also displays the parental controls screen <br><br>
+ * 
+ * @version 1.0
+ * @author Lucas
+ * @author Matthew
+ */
+
 public class ParentalControls extends JFrame {
+	
+	/** variable that contains the soundplayer */
+    SoundPlayer player = new SoundPlayer();
+    /** varibale totoggle if music should play */
     private JCheckBox musicToggle;
 
+    /**
+     * The constructor method opens the parental controls screen.
+     * The screen displays buttons required for parental controls.
+     */
     public ParentalControls() {
         // Set up the frame
         setTitle("Parental Controls");
@@ -44,7 +66,6 @@ public class ParentalControls extends JFrame {
 
         JButton revivePetButton = new JButton("\uD83D\uDC80 Revive Pet");
         revivePetButton.setBounds(130, 200, 240, 40);
-        // revivePetButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Reviving pet..."));
         revivePetButton.addActionListener(e -> revivePet());
         add(revivePetButton);
 
@@ -57,24 +78,42 @@ public class ParentalControls extends JFrame {
         setVisible(true);
     }
 
-    // Method to toggle background music
+    /**
+     * Method to toggle background music.
+     */
     private void toggleMusic() {
         if (musicToggle.isSelected()) {
+            player.playLoop("wav sound files" + File.separator + "music.wav");
             JOptionPane.showMessageDialog(this, "Music turned ON!");
         } else {
+            player.stop();
             JOptionPane.showMessageDialog(this, "Music turned OFF!");
         }
     }
 
-
+    /**
+     * Method to revive a pet.
+     */
     private void revivePet(){
         new reviveSelect();
     }
 
-
+/**
+ * Revive a pet
+ * <br><br>
+ * This class opens the pet revive screen and allows the parent to select a save slot and revive and pet.<br><br>
+ * 
+ * 
+ */
     
 class reviveSelect extends JFrame {
+	/** private integer defining the saveslot */
     private int saveSlot = 0;
+    
+    /**
+     * The screen for pet revival open.
+     * The parents selects a pet to revive.
+     */
     public reviveSelect() {
         setTitle("Pet Revive");
         setSize(600, 300);
@@ -136,7 +175,7 @@ class reviveSelect extends JFrame {
             // Pet Image
             JLabel imageLabel = new JLabel();
             imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            ImageIcon petIcon = new ImageIcon(g.loadedPet.getType()+ ".png");
+            ImageIcon petIcon = new ImageIcon("Sprites" + File.separator + g.loadedPet.getType()+ ".png");
             Image scaled = petIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
             imageLabel.setIcon(new ImageIcon(scaled));
 
@@ -167,8 +206,9 @@ class reviveSelect extends JFrame {
 }
 
 
-
-    // Method to reset account
+	/**
+	 * Method to reset account
+	 */
     private void resetAccount() {
         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset the account? This cannot be undone!", 
                                                     "Confirm Reset", JOptionPane.YES_NO_OPTION);
@@ -182,7 +222,10 @@ class reviveSelect extends JFrame {
         }
     }
 
-    // Method to open Parental Statistics screen
+    /**
+     * Method to open Parental Statistics screen.
+     * The parent can view the gameplay statistics.
+     */
     private void openParentalStatistics() {
         JFrame statsFrame = new JFrame("Parental Statistics");
         statsFrame.setSize(500, 400);
@@ -210,7 +253,7 @@ class reviveSelect extends JFrame {
         JLabel totalLabel = new JLabel("\uD83C\uDFAE Total play time:");
         totalLabel.setBounds(100, 100, 150, 30);
         statsFrame.add(totalLabel);
-        String TtlPlayTime = "touch some grass";
+        String TtlPlayTime = "";
         
         JTextField totalPlayTime = new JTextField(TtlPlayTime);
         totalPlayTime.setBounds(260, 100, 140, 30);
@@ -221,7 +264,7 @@ class reviveSelect extends JFrame {
         JLabel averageLabel = new JLabel("\uD83D\uDCD5 Average play time:");
         averageLabel.setBounds(100, 150, 150, 30);
         statsFrame.add(averageLabel);
-        String AvgPlayTime = "a bajillion";
+        String AvgPlayTime = "";
         
         JTextField averagePlayTime = new JTextField(AvgPlayTime);
         averagePlayTime.setBounds(260, 150, 140, 30);
@@ -241,6 +284,11 @@ class reviveSelect extends JFrame {
         statsFrame.setLocationRelativeTo(null);
         statsFrame.setVisible(true);
     }
+    
+    /**
+     * Method to open Parental Limitations screen.
+     * The parent can set limitations that affect when the player can play the game.
+     */
     private void openParentalLimitations() {
         JFrame limitationsFrame = new JFrame("Parental Limitations");
         limitationsFrame.setSize(500, 400);
@@ -301,17 +349,22 @@ class reviveSelect extends JFrame {
             if (fromTime.compareTo(toTime) >= 0) {
                 JOptionPane.showMessageDialog(limitationsFrame, "Invalid time range! 'From' time must be before 'To' time.", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
+                boolean enabled = enableLimitations.isSelected();
+                saveParentalControlsToCSV(enabled, fromTime, toTime);
                 JOptionPane.showMessageDialog(limitationsFrame, "Parental limitations set from " + fromTime + " to " + toTime + ".");
             }
         });
         limitationsFrame.add(confirmButton);
 
+
         limitationsFrame.setLocationRelativeTo(null);
         limitationsFrame.setVisible(true);
     }
 
-    // Method to show password prompt
-
+    /**
+     * Method to show password prompt.
+     * The parent must enter a password to enter the parental controls screen.
+     */
     public static void showPasswordPrompt() {
         JDialog passwordDialog = new JDialog((Frame) null, "Enter Password", true);
         passwordDialog.setSize(300, 180);
@@ -327,7 +380,7 @@ class reviveSelect extends JFrame {
         loginButton.setBounds(20, 60, 100, 30);
         loginButton.addActionListener(e -> {
             String password = new String(passwordField.getPassword());
-            if (password.equals("admin123")) {  // < ---- Master Password
+            if (password.equals("bitbuddy")) {  // < ---- Master Password
                 passwordDialog.dispose();
                 new ParentalControls();
             } else {
@@ -347,10 +400,34 @@ class reviveSelect extends JFrame {
         passwordDialog.setVisible(true);
     }
 
-    // Method to handle "Forgot Password?" functionality
-    private static void showForgotPasswordDialog() {
-        JOptionPane.showMessageDialog(null, "Hint: The password is 'admin123'", "Password Hint", JOptionPane.INFORMATION_MESSAGE);
+    /**
+     * Method to handle "Forgot Password?" functionality
+     * The player can find the password if they forgot.
+     */
+        private static void showForgotPasswordDialog() {
+            JOptionPane.showMessageDialog(null, "Hint: The password is 'bitbuddy'", "Password Hint", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+    /**
+     * Method to update the parent's preferences to the save file
+     *     
+     * @param enabled a boolean variable that checks if there is a limitation enabled
+     * @param from the start time when the player can play
+     * @param to the end time when the player will have to stop playing
+     * @throws an IOException if there is an error saving the parameters to the .csv file
+     */
+        private void saveParentalControlsToCSV(boolean enabled, String from, String to) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter("ParentalControls.csv"))) {
+            pw.println((enabled ? "T" : "F") + from + "/" + to);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    // Main method to start the application with a password prompt
+
 }
+
+
+
+
+

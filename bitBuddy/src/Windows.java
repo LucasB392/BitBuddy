@@ -2,66 +2,182 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import java.io.File;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+/**
+ * Class that displays the window
+ * <br><br>
+ * This is the main class that is responsible for displaying the main menu, displaying other screens, and creating pets.<br><br>
+ * 
+ * @version 1.0
+ * @author Matthew
+ */
 
 public class Windows {
+	/** The private variable that represents the save slot */
     public int saveSlot;
+
+    /**
+     * Main method that will open the game.
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MainMenu());
     }
+
+    /**
+     * Method to load the parental controls specified by the parent.
+     * 
+     * @throws an IOException if the .csv file cannot be found
+     */
+    public static void loadParentalControls() {
+        try (BufferedReader br = new BufferedReader(new FileReader("ParentalControls.csv"))) {
+            String line = br.readLine();
+            if (line != null && line.matches("[TF]\\d{2}:\\d{2}/\\d{2}:\\d{2}")) {
+                boolean limit = line.charAt(0) == 'T';
+    
+                String[] times = line.substring(1).split("/");
+                String[] startParts = times[0].split(":");
+                String[] endParts = times[1].split(":");
+    
+                int startMin = Integer.parseInt(startParts[0]) * 60 + Integer.parseInt(startParts[1]);
+                int endMin = Integer.parseInt(endParts[0]) * 60 + Integer.parseInt(endParts[1]);
+    
+                // Use the parsed values
+                System.out.println("Limitations: " + limit);
+                System.out.println("Start (min): " + startMin);
+                System.out.println("End (min): " + endMin);
+    
+                int currentMin = java.time.LocalTime.now().getHour() * 60 + java.time.LocalTime.now().getMinute();
+                if(limit){
+                    if(currentMin < startMin || currentMin > endMin){
+                        System.exit(0);
+                    }
+                }
+            } else {
+                System.out.println("Invalid format in ParentalControls.csv");
+            }
+        } catch (IOException e) {
+            System.out.println("ParentalControls.csv not found or unreadable.");
+        }
+    
+    
+    
+    
+        
+    
+    }
+    
+
 }
 
+/**
+ * Open the main menu
+ * <br><br>
+ * This class opens the main menu and displays the required buttons so that the player can proceed to another screen.<br><br>
+ */
 
 class MainMenu extends JFrame {
+	
+	/**
+	 * Open the main menu screen.
+	 * Display buttons.
+	 */
+
     public MainMenu() {
-
-
-        
 
         setTitle("Menu");
         setSize(600, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+    
+        String logoPath = "Sprites" + File.separator +"logo.png";
+    
+        // Load the image
+        ImageIcon logoIcon = new ImageIcon(getClass().getResource("/Sprites/logo.png"));
 
-        JLabel label = new JLabel("BitBuddy", SwingConstants.CENTER);
-        add(label, BorderLayout.CENTER);
-
+        
+        JLabel logoLabel = new JLabel(logoIcon, SwingConstants.CENTER);
+    
+        // Create a panel for the logo and group info
+        JPanel logoPanel = new JPanel();
+        logoPanel.setLayout(new BorderLayout());
+    
+        logoPanel.add(logoLabel, BorderLayout.CENTER);
+    
+        // Create group info label
+        String groupText = "<html><div style='text-align: center;'>"
+                + "Group 74<br>"
+                + "Matthew Short "
+                + "Scott Vanegas "
+                + "Lucas Brown "
+                + "Auntic Ahamad "
+                + "Elmar Rasho"
+                + "</div></html>";
+        JLabel groupInfo = new JLabel(groupText, SwingConstants.CENTER);
+    
+        logoPanel.add(groupInfo, BorderLayout.SOUTH);
+    
+        add(logoPanel, BorderLayout.CENTER);
+    
+        // Button panel
         JPanel buttonPanel = new JPanel();
         JButton startButton = new JButton("Choose Pet");
         JButton tutorialButton = new JButton("Tutorial");
         JButton parentalControlsButton = new JButton("Parental Controls");
-
+    
         startButton.addActionListener(e -> {
             dispose(); // close this window
             new chooseSave(); // open game window
         });
-
+    
         tutorialButton.addActionListener(e -> {
-            dispose();
             new TutorialScreen();
         });
+    
         parentalControlsButton.addActionListener(e -> {
-            // dispose();
-
             ParentalControls.showPasswordPrompt();
         });
+    
         buttonPanel.add(startButton);
         buttonPanel.add(tutorialButton);
-        add(buttonPanel, BorderLayout.SOUTH);
         buttonPanel.add(parentalControlsButton);
-
+    
+        add(buttonPanel, BorderLayout.SOUTH);
+    
         setVisible(true);
     }
+    
+
+
+
+
+
 }
 
 
 
-
+/**
+ * Select the save file
+ * <br><br>
+ * This class opens the save screen and allows the player to select a save slot.<br><br>
+ */
 
 class chooseSave extends JFrame {
+	/** The private variable that represents the save slot */
     private int saveSlot = 0;
+    
+    /**
+     * Method to open the save screen.
+     * The player can select a save slot.
+     * Pets are displayed as sprites.
+     */
     public chooseSave() {
         setTitle("Pet Saves");
         setSize(600, 300);
@@ -92,6 +208,7 @@ class chooseSave extends JFrame {
             if (!isEmpty) {
                 button.addActionListener(e -> {
                     dispose();
+                    
                     new GameWindow(saveSlot,System.currentTimeMillis());
                 });
             }else{
@@ -114,15 +231,20 @@ class chooseSave extends JFrame {
             // Pet Image
             JLabel imageLabel = new JLabel();
             imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            ImageIcon petIcon = new ImageIcon(g.loadedPet.getType()+ ".png");
+
+            ImageIcon petIcon = new ImageIcon("Sprites" + File.separator + g.loadedPet.getType()+ ".png");
             Image scaled = petIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+            
+
             imageLabel.setIcon(new ImageIcon(scaled));
 
-
-
             // Pet Type Label
-            JLabel textLabel = new JLabel(isEmpty ? "" : g.loadedPet.getType(), SwingConstants.CENTER);
-            textLabel.setFont(new Font("SansSerif", Font.ITALIC, 12));
+            String typeText = isEmpty ? "" : g.loadedPet.getType().toUpperCase();
+            JLabel textLabel = new JLabel(typeText, SwingConstants.CENTER);
+            textLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+            textLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+            textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 
 
 
@@ -147,14 +269,25 @@ class chooseSave extends JFrame {
 
 
 
-
-
-
+/**
+ * Create a pet
+ * <br><br>
+ * This class allows the player to select a pet when they are starting the game.<br><br>
+ */
 
 class createPet extends JFrame {
+	/** empty string defining the pet's type */
     String saveType = "";
+    /** empty string defining the pet's name */
     String name = "";
 
+    /**
+     * Method to create a pet.
+     * The player will select a pet.
+     * Pets are displayed as sprites.
+     * 
+     * @param saveSlot representing the save slot the player is using
+     */
     public createPet(int saveSlot) {
         setTitle("Choose your new Pet!");
         setSize(600, 400);
@@ -169,7 +302,7 @@ class createPet extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 20));
 
             // Load image
-            ImageIcon icon1 = new ImageIcon("cat" + ".png");
+            ImageIcon icon1 = new ImageIcon("Sprites" + File.separator +"cat" + ".png");
             Image scaled1 = icon1.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon1 = new ImageIcon(scaled1);
 
@@ -186,7 +319,7 @@ class createPet extends JFrame {
 
 
 
-            ImageIcon icon2 = new ImageIcon("bowser" + ".png");
+            ImageIcon icon2 = new ImageIcon("Sprites" + File.separator +"bowser" + ".png");
             Image scaled2 = icon2.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon2 = new ImageIcon(scaled2);
 
@@ -201,7 +334,7 @@ class createPet extends JFrame {
             });
 
 
-            ImageIcon icon3 = new ImageIcon("ryu" + ".png");
+            ImageIcon icon3 = new ImageIcon("Sprites" + File.separator + "ryu" + ".png");
             Image scaled3 = icon3.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon3 = new ImageIcon(scaled3);
 
@@ -223,12 +356,23 @@ class createPet extends JFrame {
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
 
-        JTextField textField = new JTextField();
-        textField.setMaximumSize(new Dimension(400, 30));
-        textField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel nameFieldPanel = new JPanel();
+nameFieldPanel.setLayout(new BoxLayout(nameFieldPanel, BoxLayout.X_AXIS));
+nameFieldPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton submitButton = new JButton("Submit");
-        submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+JLabel nameLabel = new JLabel("Name:");
+nameLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+nameLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+
+JTextField textField = new JTextField();
+textField.setMaximumSize(new Dimension(300, 30));
+
+nameFieldPanel.add(nameLabel);
+nameFieldPanel.add(textField);
+
+JButton submitButton = new JButton("Submit");
+submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 
         submitButton.addActionListener(e -> {
             String userInput = textField.getText();
@@ -243,7 +387,10 @@ class createPet extends JFrame {
         });
 
 
-
+        inputPanel.add(nameFieldPanel);
+        inputPanel.add(Box.createVerticalStrut(10));
+        inputPanel.add(submitButton);
+        
         inputPanel.add(textField);
         inputPanel.add(Box.createVerticalStrut(10));
         inputPanel.add(submitButton);
@@ -256,7 +403,18 @@ class createPet extends JFrame {
     }
 }
 
+/**
+ * Describe the items
+ * <br><br>
+ * This class opens a screen which lists the items in the array. The items contain their respective descriptions.<br><br>
+ */
 class ItemDetailWindow extends JFrame {
+	
+	/**
+	 * Method to display the items in the window.
+	 * 
+	 * @param the selected item to be displayed
+	 */
     public ItemDetailWindow(arrayObject item) {
         setTitle(item.getName());
         setSize(300, 250);
@@ -287,7 +445,18 @@ class ItemDetailWindow extends JFrame {
 }
 
 
+/**
+ *  Describe items in inventory
+ *  <br><br>
+ *  This class opens the inventory screen and displays the items that the player contains in their inventory.<br><br>
+ */
 class InventoryWindow extends JFrame{
+	
+	/**
+	 * Open the inventory window and displays the listed items in an array.
+	 * 
+	 * @param inventory represents the player's inventory
+	 */
     public InventoryWindow(ItemArray inventory){
         setTitle("Inventory");
         setSize(600,200);
@@ -321,71 +490,27 @@ class InventoryWindow extends JFrame{
     }
 }
 
-class StoreWindow extends JFrame {
-    private int points;
-    private JLabel pointsLabel;
-    private ItemArray inventory;
-
-    public StoreWindow(ItemArray inventory, int currentPoints) {
-        this.inventory = inventory;
-        this.points = currentPoints;
-
-        setTitle("Store");
-        setSize(600, 400);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout());
-
-        pointsLabel = new JLabel("Points: " + points, SwingConstants.CENTER);
-        pointsLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
-        add(pointsLabel, BorderLayout.NORTH);
-
-        JPanel storePanel = new JPanel(new GridLayout(0, 3, 10, 10));
-        JScrollPane scrollPane = new JScrollPane(storePanel);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        add(scrollPane, BorderLayout.CENTER);
-
-        // Store items
-        addStoreItem(storePanel, "Pizza", "Yummy food that fills you up.", "C:\\Users\\Auntic\\2212_Git_Repos\\group74\\group74\\GroupProject\\src\\Sprites\\pizza.png", 0, 0, 0, 25, 5, 20);
-        addStoreItem(storePanel, "Potion", "Magical potion to restore health.", "C:\\Users\\Auntic\\2212_Git_Repos\\group74\\group74\\GroupProject\\src\\Sprites\\potion.png", 0, 30, 0, 0, 0, 30);
-        addStoreItem(storePanel, "Bone", "A classic toy your pet loves.", "C:\\Users\\Auntic\\2212_Git_Repos\\group74\\group74\\GroupProject\\src\\Sprites\\bone.png", 1, 0, 0, 0, 20, 25);
-
-        setVisible(true);
-    }
-
-    private void addStoreItem(JPanel panel, String name, String desc, String spritePath, int type, int health, int sleep, int fullness, int happiness, int cost) {
-        File sprite = new File(spritePath);
-        ImageIcon icon = null;
-        if (sprite.exists()) {
-            Image raw = new ImageIcon(sprite.getPath()).getImage();
-            Image scaled = raw.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-            icon = new ImageIcon(scaled);
-        }
-
-        JButton itemButton = new JButton(name, icon);
-        itemButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        itemButton.setHorizontalTextPosition(SwingConstants.CENTER);
-
-        itemButton.addActionListener(e -> {
-            if (points < cost) {
-                JOptionPane.showMessageDialog(this, "Not enough points!");
-                return;
-            }
-
-            inventory.addObj(sprite, name, desc, type, health, sleep, fullness, happiness);
-            points -= cost;
-            GameFile.updateScore(points);
-            pointsLabel.setText("Points: " + points);
-            JOptionPane.showMessageDialog(this, name + " added to inventory!");
-        });
-
-        panel.add(itemButton);
-    }
-}
 
 
+/**
+ * Open the gameplay window that displays the current pet.
+ * <br><br>
+ * This class opens the gameplay window where they will see their selected pet. Vital statistics bars are displayed as well as additional buttons that allow the player to go to the store or their inventory.<br><br>
+ */
 class GameWindow extends JFrame {
+	
+	/**
+	 * Method to open the game window.
+	 * The pet is displayed.
+	 * The player will be able to view the vital statistics of the pet.
+	 * The player can visit the store and their inventory
+	 * The player can save the game at any time.
+	 * 
+	 * @param save the integer that represents the save slot
+	 * @param time the time spent playing on the selected save slot
+	 */
     public GameWindow(int save, long time) {
+        Windows.loadParentalControls();
         setTitle("Game Page");
         setSize(600, 400);
         System.out.println("time: " + time);
@@ -395,15 +520,22 @@ class GameWindow extends JFrame {
 
         GameFile g = new GameFile();
         g.loadGame(save);
+        
         g.loadedPet.setCounter(System.currentTimeMillis());
 
         Commands c = new Commands(g.loadedPet);
         
         JPanel itemPanel = new JPanel(new GridLayout(3, 3, 10, 10));
         // Top panel with title and save button, and inventory button
+
+        
         JPanel topPanel = new JPanel(new BorderLayout());
         JLabel titleLabel = new JLabel(c.pet.getName(), SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+
+
+
+
         topPanel.add(titleLabel, BorderLayout.CENTER);
         JButton saveButton = new JButton("Save");
         JButton inventoryButton = new JButton("Inventory");
@@ -443,6 +575,8 @@ class GameWindow extends JFrame {
         petLabel.setIcon(new ImageIcon(petSprite.getDisplayedSprite()));
         centerPanel.add(petLabel);
 
+        
+
         // Right: Health bars
         JPanel statsPanel = new JPanel(new GridLayout(4, 1, 5, 5));
         JProgressBar healthBar = createProgressBar(c.pet.getHealth());
@@ -461,7 +595,7 @@ class GameWindow extends JFrame {
         JButton feedButton = new JButton("Feed");
         JButton sleepButton = new JButton("Sleep");
         JButton playButton = new JButton("Play");
-        JButton medicineButton = new JButton("Medicine");
+        JButton medicineButton = new JButton("Visit Vet");
         JButton trainButton = new JButton("Train");
         JButton exerciseButton = new JButton("Exercise");
         JButton moveButton = new JButton("Move");
@@ -481,8 +615,7 @@ class GameWindow extends JFrame {
             happinessBar.setValue(c.pet.getHappiness());
         });
         medicineButton.addActionListener(e -> {
-            System.out.println("Inv size: " + g.loadedPet.inv.objectData.size());
-            c.visitVet();
+            c.visitVet("Potion");
             healthBar.setValue(c.pet.getHealth());
         });
         exerciseButton.addActionListener(e -> {
@@ -495,7 +628,7 @@ class GameWindow extends JFrame {
             // Optionally, update pet status here if needed.
         });
         presentButton.addActionListener(e -> {
-            c.givePetPresent("Ball");
+            c.givePetPresent("Bone");
         });
         buttonPanel.add(feedButton);
         buttonPanel.add(sleepButton);
@@ -512,6 +645,12 @@ class GameWindow extends JFrame {
 
         // Timer to update pet stats and sprite every second.
         Timer timer = new Timer(1000, new ActionListener() {
+        	
+        	/**
+        	 * Method to update the vital statistics of the pet over time
+        	 * 
+        	 * @param evt an event that will affect the vital statistics of the pet
+        	 */
             public void actionPerformed(ActionEvent evt) {
                 g.loadedPet.petCounter(System.currentTimeMillis());
                 hungerBar.setValue(c.pet.getHunger());
@@ -528,20 +667,40 @@ class GameWindow extends JFrame {
 
         // Additional Timer to flip the sprite horizontally every 5 seconds.
         Timer flipTimer = new Timer(5000, new ActionListener() {
+        	
+        	/**
+        	 * Method to display a horizontally flipped sprite every 5 seconds.
+        	 */
             public void actionPerformed(ActionEvent evt) {
                 petSprite.toggleFlip();
                 petLabel.setIcon(new ImageIcon(petSprite.getDisplayedSprite()));
             }
         });
         flipTimer.start();
+
+
+        
     }
 
+    /**
+     * Method to create the vital statistics bars
+     * 
+     * @param value the integer value of the statistic
+     * @return a bar containing the value
+     */
     private JProgressBar createProgressBar(int value) {
         JProgressBar bar = new JProgressBar(0, 100);
         bar.setValue(value);
         return bar;
     }
 
+    /**
+     * Method to create a status panel displaying the vital statistics bars
+     * 
+     * @param label the name of the bar
+     * @param bar a bar containing the value
+     * @return the panel containing the vital statistics bars
+     */
     private JPanel createStatusPanel(String label, JProgressBar bar) {
         JPanel panel = new JPanel(new BorderLayout());
         JLabel textLabel = new JLabel(label);
@@ -550,8 +709,4 @@ class GameWindow extends JFrame {
         return panel;
     }
 }
-
-
-
-
 

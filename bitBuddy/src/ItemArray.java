@@ -2,12 +2,31 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class handling array management
+ * <br><br>
+ * Objects are added to the array and can be removed.<br><br>
+ * 
+ * @version 1.0
+ * @author Auntic
+ */
+
 public class ItemArray {
-    // Public attributes
+    /** Public attributes */
     List<arrayObject> objectData = new ArrayList<>();
 
-    // Add to array of object data
-    //Object class; 0 = consumable, 1 = decoration, 2 = utility
+    /**
+     * Adds the required parameters to the array.
+     * 
+     * @param sprite the image of the pet
+     * @param name the name of the pet
+     * @param description the description associated with the pet
+     * @param objClass the Pet object
+     * @param modHealth the pet's health level
+     * @param modSleep the pet's sleep level
+     * @param modFullness the pet's fullness level
+     * @param modHappiness the pet's happiness level
+     */
     public void addObj(File sprite, String name, String description, int objClass, int modHealth, int modSleep, int modFullness, int modHappiness){
         arrayObject obj = new arrayObject();
         obj.setSprite(sprite);
@@ -21,17 +40,28 @@ public class ItemArray {
         objectData.add(obj);
     }
 
-    // Remove from array of object data
-    public void removeObj(String target){
-        for (int i = objectData.size()-1; i >= 0; i -= 1){
+    /**
+     * Removes the specified target from the array.
+     * 
+     * @param target which is the required item to remove
+     */
+    public void removeObj(String target) {
+        for (int i = objectData.size() - 1; i >= 0; i--) {
             String name = objectData.get(i).getName();
-             if (target.equals(name)){
+            if (target.toLowerCase().equals(name.toLowerCase())) {
                 objectData.remove(i);
-             }
+                break; // Stop after removing the first match
+            }
         }
     }
+    
 
-    // Method to get an item
+    /**
+     * Searches for an item in the array and returns that object.
+     * 
+     * @param target which is the required item to locate
+     * @return the object if found
+     */
     public arrayObject getItem(String target) {
         for (int i = 0; i < objectData.size(); i += 1){
              String name = objectData.get(i).getName();
@@ -42,7 +72,11 @@ public class ItemArray {
         return null;
     }
 
-    // Returns a set of lines, each representing an object. every column will represent an attribute of the row object
+    /**
+     * Returns a set of lines, each representing an object. every column will represent an attribute of the row object
+     * 
+     * @return the string containing the attributes of the object.
+     */
     public String getSave(){
         String saveFile = "";
         for (int item = 0; item < objectData.size(); item += 1){
@@ -54,6 +88,11 @@ public class ItemArray {
     }
 
     // Is fed the savestring from excel, must be called when creating a new inventory array on game load to load it with objects.
+    /**
+     * Load the array with objects when the game starts.
+     * 
+     * @param saved the string containing the attributes of the pet
+     */
     public void loadArray(String saved){
         String[] lines = saved.split("\n");
         for (String line: lines){
@@ -72,11 +111,16 @@ public class ItemArray {
         }
     }
 
-    // Get amount of objects in inventory
+    /**
+     * Get amount of objects in inventory.
+     * 
+     * @return the amount of objects found in the inventory.
+     */
     public int getSize(){
         return objectData.size();
     }
 
 
 }
+
 

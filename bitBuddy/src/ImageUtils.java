@@ -1,8 +1,24 @@
 import java.awt.*;
 import java.awt.image.*;
 
+/**
+ * Class to handle sprites and images with transparent backgrounds
+ * <br><br>
+ * This class is responsible to accepting with transparent backgrounds and updating their colour.<br><br>
+ * 
+ * @version 1.0
+ * @author Elmar
+ */
+
 public class ImageUtils {
 
+	/**
+	 * Update the image.
+	 * 
+	 * @param image the image with the transparent background
+	 * @param color the colour used for conversion
+	 * @return the updated image
+	 */
     public static BufferedImage makeColorTransparent(BufferedImage image, final Color color) {
         ImageFilter filter = new RGBImageFilter() {
             // Convert the given color to a marker value.
@@ -26,3 +42,4 @@ public class ImageUtils {
         return bimage;
     }
 }
+
