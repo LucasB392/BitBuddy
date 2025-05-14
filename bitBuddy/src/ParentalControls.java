@@ -423,7 +423,6 @@ class reviveSelect extends JFrame {
         }
     }
 
-
 }
 
 

@@ -65,15 +65,7 @@ public class Windows {
         } catch (IOException e) {
             System.out.println("ParentalControls.csv not found or unreadable.");
         }
-    
-    
-    
-    
-        
-    
     }
-    
-
 }
 
 /**
@@ -100,7 +92,7 @@ class MainMenu extends JFrame {
         String logoPath = "Sprites" + File.separator +"logo.png";
     
         // Load the image
-        ImageIcon logoIcon = new ImageIcon(getClass().getResource("/Sprites/logo.png"));
+        ImageIcon logoIcon = new ImageIcon(getClass().getResource("Sprites" + File.separator + "logo.png"));
 
         
         JLabel logoLabel = new JLabel(logoIcon, SwingConstants.CENTER);
@@ -113,12 +105,7 @@ class MainMenu extends JFrame {
     
         // Create group info label
         String groupText = "<html><div style='text-align: center;'>"
-                + "Group 74<br>"
-                + "Matthew Short "
-                + "Scott Vanegas "
                 + "Lucas Brown "
-                + "Auntic Ahamad "
-                + "Elmar Rasho"
                 + "</div></html>";
         JLabel groupInfo = new JLabel(groupText, SwingConstants.CENTER);
     
@@ -154,14 +141,7 @@ class MainMenu extends JFrame {
         setVisible(true);
     }
     
-
-
-
-
-
 }
-
-
 
 /**
  * Select the save file
@@ -184,6 +164,8 @@ class chooseSave extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+
+        System.out.println("HIIII");
 
         // Title
         JLabel titleLabel = new JLabel("Pick a Pet to Play with!", SwingConstants.CENTER);
@@ -222,12 +204,6 @@ class chooseSave extends JFrame {
                 });
             }
 
-
-
-
-
-
-
             // Pet Image
             JLabel imageLabel = new JLabel();
             imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -245,10 +221,6 @@ class chooseSave extends JFrame {
             textLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
             textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-
-
-
-
             // Vertical layout for one slot
             JPanel slotPanel = new JPanel();
             slotPanel.setLayout(new BoxLayout(slotPanel, BoxLayout.Y_AXIS));
@@ -261,13 +233,17 @@ class chooseSave extends JFrame {
 
             mainPanel.add(slotPanel);
         }
+        
+        
+        
+        System.out.println("TESTING SPOT A");
+
+
 
         add(mainPanel, BorderLayout.CENTER);
         setVisible(true);
     }
 }
-
-
 
 /**
  * Create a pet
@@ -295,9 +271,6 @@ class createPet extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-
-
-
         // Panel for buttons with images
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 20));
 
@@ -315,9 +288,6 @@ class createPet extends JFrame {
             btn1.addActionListener(e -> {
                 saveType = "cat";
             });
-
-
-
 
             ImageIcon icon2 = new ImageIcon("Sprites" + File.separator +"bowser" + ".png");
             Image scaled2 = icon2.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -347,9 +317,6 @@ class createPet extends JFrame {
             btn3.addActionListener(e -> {
                 saveType = "ryu";
             });
-
-
-
 
         // Text field + submit button panel
         JPanel inputPanel = new JPanel();
@@ -385,7 +352,6 @@ submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                 new GameWindow(saveSlot,System.currentTimeMillis());
             }
         });
-
 
         inputPanel.add(nameFieldPanel);
         inputPanel.add(Box.createVerticalStrut(10));
@@ -444,7 +410,6 @@ class ItemDetailWindow extends JFrame {
     }
 }
 
-
 /**
  *  Describe items in inventory
  *  <br><br>
@@ -489,7 +454,6 @@ class InventoryWindow extends JFrame{
         setVisible(true);
     }
 }
-
 
 
 /**

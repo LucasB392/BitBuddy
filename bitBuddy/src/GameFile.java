@@ -100,7 +100,6 @@ public class GameFile {
     public static void deleteSave(int saveSlot){
         System.out.println("Deleting save " + saveSlot + ".");
         saveGame(saveSlot,"EMPTY", "");
-        
     }
 
     /**
@@ -297,7 +296,5 @@ public static List<String> loadLineRange(String fileName, int saveSlot) {
 
     return result;
 }
-
-
 
 }
