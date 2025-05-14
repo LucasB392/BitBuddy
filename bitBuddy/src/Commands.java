@@ -12,8 +12,7 @@ import javax.sound.sampled.Clip;
  * This class is responsible for using commands that can interact with the pet. The user is able to feed the pet, make the pet sleep, provide a gift, etc.<br><br>
  * 
  * @version 1.0
- * @author Elmar
- * @author Matthew
+ * @author Lucas Brown
  */
 
 public class Commands {
@@ -72,7 +71,7 @@ public class Commands {
     }
 
     /**
-     * a) Go to bed: Pet sleeps until its sleep value reaches the maximum.
+     * Go to bed: Pet sleeps until its sleep value reaches the maximum.
      * 
      * @throws an InterruptedException if the pet cannot sleep
      */
@@ -103,7 +102,7 @@ public class Commands {
     }
 
     /**
-     * b) Feed: Increases pet's fullness using the food item from pet.inv.
+     * Feed: Increases pet's fullness using the food item from pet.inv.
      * 
      * @param foodType the food item that the pet will consume
      */
@@ -133,7 +132,7 @@ public class Commands {
     }
 
     /**
-     * c) Give Gift: Increases the pet's happiness using a gift item from pet.inv.
+     * Give Gift: Increases the pet's happiness using a gift item from pet.inv.
      * 
      * @param giftType the gift type that the pet will receive
      */
@@ -163,7 +162,7 @@ public class Commands {
     }
 
     /**
-     * d) Take to the Vet: Increases pet's health.
+     * Take to the Vet: Increases pet's health.
      * 
      * @param medicineType the type of medicine that the pet will receive while it is at the vet
      */
@@ -214,7 +213,7 @@ public class Commands {
     }
 
     /**
-     * e) Play: Increases pet's happiness.
+     * Play: Increases pet's happiness.
      */
     public void playWithPet() {
         if (!canUseCommand("Play")) {
@@ -241,7 +240,7 @@ public class Commands {
     }
 
     /**
-     * f) Exercise: Lowers pet's hunger/sleep while increasing health.
+     * Exercise: Lowers pet's hunger/sleep while increasing health.
      */
     public void exercisepet() {
         if (!canUseCommand("Exercise")) {

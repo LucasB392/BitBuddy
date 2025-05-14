@@ -6,7 +6,7 @@ import java.io.File;
  * This class creates the an array and displays the items in the player's inventory.<br><br>
  * 
  * @version 1.0
- * @author Auntic
+ * @author Lucas
  */
 
 public class arrayObject {

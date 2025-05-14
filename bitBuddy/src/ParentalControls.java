@@ -14,7 +14,6 @@ import javax.swing.*;
  * 
  * @version 1.0
  * @author Lucas
- * @author Matthew
  */
 
 public class ParentalControls extends JFrame {

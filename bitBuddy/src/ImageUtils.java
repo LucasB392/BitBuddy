@@ -7,7 +7,7 @@ import java.awt.image.*;
  * This class is responsible to accepting with transparent backgrounds and updating their colour.<br><br>
  * 
  * @version 1.0
- * @author Elmar
+ * @author Lucas Brown
  */
 
 public class ImageUtils {

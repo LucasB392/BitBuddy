@@ -6,7 +6,7 @@ import java.io.File;
  * This class contains attributes for the current pet and these attributes can be updated according to the pet's state.<br><br>
  * 
  * @version 1.0
- * @author Matthew
+ * @author Lucas
  */
 
 public class Pet {

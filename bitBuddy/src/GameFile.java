@@ -14,8 +14,7 @@ import java.util.List;
  * This class is responsible for saving the game. It collects data, stores into save files, and can be loaded for future gaming sessions.<br><br>
  * 
  * @version 1.0
- * @author Auntic
- * @author Matthew
+ * @author Lucas Brown
  */
 
 public class GameFile { 

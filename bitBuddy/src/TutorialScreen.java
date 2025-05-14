@@ -9,8 +9,7 @@ import javax.swing.*;
  * This class opens the tutorial screen, displays images that depict other screens in the game, and lists instructions on how to play the game.<br><br>
  * 
  * @version 1.0
- * @author Matthew
- * @author Scott
+ * @author Lucas
  */
 
 public class TutorialScreen extends JFrame {

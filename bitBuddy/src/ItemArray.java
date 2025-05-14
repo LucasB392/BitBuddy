@@ -8,7 +8,7 @@ import java.util.List;
  * Objects are added to the array and can be removed.<br><br>
  * 
  * @version 1.0
- * @author Auntic
+ * @author Lucas Brown
  */
 
 public class ItemArray {

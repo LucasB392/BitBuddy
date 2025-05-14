@@ -14,7 +14,7 @@ import java.io.IOException;
  * This is the main class that is responsible for displaying the main menu, displaying other screens, and creating pets.<br><br>
  * 
  * @version 1.0
- * @author Matthew
+ * @author Lucas
  */
 
 public class Windows {

@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
  * This class opens the sprites and displays them on the screen. Additionally, the pet's states will be displayed. The selected pet will be displayed during gameplay.<br><br>
  * 
  * @version 1.0
- * @author Elmar
+ * @author Lucas Brown
  */
 
 public class PetSprite {

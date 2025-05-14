@@ -19,8 +19,7 @@ import javax.swing.SwingConstants;
  * This class opens the store window and displays the items for sale (bone, pizza, potion). The player must have sufficient points to purchase an item.<br><br>
  * 
  * @version 1.0
- * @author Elmar
- * @author Matthew
+ * @author Lucas Brown
  */
 
 

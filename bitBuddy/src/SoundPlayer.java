@@ -7,7 +7,7 @@ import javax.sound.sampled.*;
  * The class accepts a filename and plays that sound file.<br><br>
  * 
  * @version 1.0
- * @author Lucas
+ * @author Lucas Brown
  */
 
 //Class the handles the playing of audio (music, sound effects)
