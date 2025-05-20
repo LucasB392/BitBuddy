@@ -31,11 +31,6 @@ public class PetSprite {
     public PetSprite(String petType) {
         this.petType = petType.toLowerCase();
 
-        System.out.println("YABBADABBADOOOO");
-        System.out.println(this.petType);
-        System.out.println();
-        
-        
         String filePath = "";
         switch (this.petType) {
             case "bowser":
@@ -85,14 +80,13 @@ public class PetSprite {
     private void updateSprite() {
 
         // e.g. Sprites/ryuSprites/ryuHUNGRY.png
-        String spriteFilePath = "Sprites" + File.separator + petType.toLowerCase() + "Sprites" + 
+        String spriteFilePath = "out" + File.separator + "Sprites" + File.separator + petType.toLowerCase() + "Sprites" + 
         File.separator + petType.toLowerCase() + currentState.toUpperCase() + ".png";
-
-        System.out.println(spriteFilePath);
                     
         try {
             File spriteFile = new File(spriteFilePath);
             if (!spriteFile.exists()) {
+                System.out.println(this.currentState);
                 System.err.println("Sprite not found: " + spriteFile.getAbsolutePath());
                 return;
             }

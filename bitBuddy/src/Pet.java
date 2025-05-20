@@ -43,9 +43,6 @@ public class Pet {
     private long happinessCounter;
     /** private variable that checks the pet's health level */
     private long healthCounter;
-
-
-
     
     // Constructor
     /** 
@@ -63,7 +60,7 @@ public class Pet {
         this.happiness = 100;
         this.sleep = 100;
         this.size = "Small";
-        this.status = "Happy";
+        this.status = "Normal";
         this.firstSave = true;
         File food = new File("food.png");
         inv.addObj(food, "food", "for eating", 0, 0, 0, 0, 0);
@@ -267,9 +264,27 @@ public class Pet {
         if (hunger < 30 || sleep < 30) {
             happiness = Math.max(0, happiness - 1);
         }
+
+        if (!status.toLowerCase().equals("sleeping")) {
+            updateStatus();
+        }
+        
     }
 
-
+    public void updateStatus() {
+        if (this.health == 0){
+            setStatus("Dead");
+        }
+        else if (this.happiness < 10) {
+            setStatus("Angry");
+        }
+        else if (this.hunger < 20) {
+            setStatus("Hungry");
+        }
+        else {
+            setStatus("Normal");
+        }
+    }
 
 }
 

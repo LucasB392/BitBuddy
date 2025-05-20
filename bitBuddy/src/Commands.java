@@ -96,8 +96,8 @@ public class Commands {
                 pet.setSleep(Math.min(pet.getSleep() + 10, MAX_SLEEP));
                 System.out.println("Sleeping... Current sleep value: " + pet.getSleep());
             }
-            pet.setStatus("Normal");
             System.out.println("Pet is fully rested and now awake.");
+            pet.updateStatus();
         }).start();
     }
 
@@ -129,6 +129,7 @@ public class Commands {
         if (StoreWindow.currentStoreWindow != null) {
             StoreWindow.currentStoreWindow.updatePoints(points);
         }
+        pet.updateStatus();
     }
 
     /**

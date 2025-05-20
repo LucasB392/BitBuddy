@@ -36,7 +36,8 @@ public class Windows {
      * @throws an IOException if the .csv file cannot be found
      */
     public static void loadParentalControls() {
-        try (BufferedReader br = new BufferedReader(new FileReader("ParentalControls.csv"))) {
+        String csvFilePath = "out" + File.separator + "ParentalControls.csv";
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
             String line = br.readLine();
             if (line != null && line.matches("[TF]\\d{2}:\\d{2}/\\d{2}:\\d{2}")) {
                 boolean limit = line.charAt(0) == 'T';

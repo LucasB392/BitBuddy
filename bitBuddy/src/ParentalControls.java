@@ -130,11 +130,6 @@ class reviveSelect extends JFrame {
 
         GameFile g = new GameFile();
 
-
-
-
-
-
         for (int i = 0; i < 3; i++) {
             final int saveSlot = i;
             g.loadGame(i);
