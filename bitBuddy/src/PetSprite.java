@@ -1,7 +1,10 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Random;
 import javax.imageio.ImageIO;
+import javax.swing.Timer;
+
 
 /**
  * Class handling pet sprite images and animations
@@ -15,12 +18,15 @@ import javax.imageio.ImageIO;
 public class PetSprite {
     //* Private variable for the currently displayed sprite */
     private BufferedImage currentSprite;
-    //* Private variable for either "bowser", "cat", "dog", or "ryu" */
+    //* Private variable for either "bowser", "cat", or "ryu" */
     private String petType;
     //* Private variable for states e.g., "normal", "sleeping", "angry", "hungry", "speaking", "dead" */
     private String currentState;
     //* Private variable for flag for horizontal flip */
     private boolean flipped = false;
+    private BufferedImage originalSprite;
+    private Timer glitchTimer;
+    private Random random = new Random();
 
     /**
      * Constructor: given the pet type, load the correct sprite sheet.
@@ -31,33 +37,6 @@ public class PetSprite {
     public PetSprite(String petType) {
         this.petType = petType.toLowerCase();
 
-        String filePath = "";
-        switch (this.petType) {
-            case "bowser":
-                filePath = "Sprites" + File.separator + "Bowser Sprite.png";
-                break;
-            case "cat":
-                filePath = "Sprites" + File.separator + "cat.png";
-                break;
-            case "ryu":
-                filePath = "Sprites" + File.separator + "ryu.png";
-                break;
-            default:
-                filePath = "Sprites" + File.separator + "cat.png";
-                break;
-        }
-        try {
-            // Process background transparency for pet types that need it.
-            Color bgColor = null;
-            if (this.petType.equals("cat")) {
-                bgColor = new Color(255, 0, 255, 255);
-            } else if (this.petType.equals("ryu")) {
-                bgColor = new Color(0, 255, 80, 255);
-            }
-        } catch (Exception e) {
-            System.out.println("Error making background transparent for " + petType + ": " + e.getMessage());
-            e.printStackTrace();
-        }
         // Set default state to normal.
         setStatus("normal");
     }
@@ -117,6 +96,9 @@ public class PetSprite {
         if (!flipped) {
             return currentSprite;
         } else {
+            if (ryuGlitch() == true) {
+                return currentSprite;
+            }
             int width = currentSprite.getWidth();
             int height = currentSprite.getHeight();
             BufferedImage flippedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -134,7 +116,39 @@ public class PetSprite {
     public BufferedImage getCurrentSprite() {
         return currentSprite;
     }
+
+
+    /**
+     * If the current pet is a Ryu pet, then every few seconds it will "glitch" and smile for a millisecond.
+     */
+    public boolean ryuGlitch() {
+        String RyuSmileFilePath = "out" + File.separator + "Sprites" + File.separator + "ryuSprites" + 
+        File.separator + "ryuSMILING.png";
+        int SmileChance = random.nextInt(8);
+        if (SmileChance == 3) {
+            try {
+                // Save original sprite
+                originalSprite = currentSprite;
+    
+                // Swap to glitch image
+                BufferedImage smile = ImageIO.read(new File(RyuSmileFilePath));
+                currentSprite = smile;
+    
+                // After a short delay, return to the original sprite
+                new Timer(15, ev -> {
+                    currentSprite = originalSprite;
+                    updateSprite();
+                    ((Timer) ev.getSource()).stop();
+                }).start();
+            } catch (Exception ex) {
+                System.err.println("Failed to load ryu smiling image.");
+                ex.printStackTrace();
+            }
+            return true;    
+        }
+        else {
+            return false;
+        }
+    }
+    
 }
-
-
-

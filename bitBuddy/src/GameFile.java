@@ -178,8 +178,6 @@ public class GameFile {
     }
     
 
-
-
     /**
      * Empty Save name
      * 
@@ -197,8 +195,6 @@ public class GameFile {
     public static String selectType(){
         return "selectedType";
     }
-
-
 
 /**
  * Load full save slot (game data + inventory)

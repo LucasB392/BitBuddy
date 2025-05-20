@@ -312,11 +312,9 @@ public class Commands {
         }
 
         SoundPlayer p = new SoundPlayer();
-        p.playLoop("wav sound files" + File.separator + soundFileName);
+        p.playLoop("out" + File.separator + "wav sound files" + File.separator + soundFileName);
 
-        
-
-        
+                
         javax.swing.Timer timer = new javax.swing.Timer(2000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {

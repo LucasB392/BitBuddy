@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 
 /**
  * Class that displays the window
@@ -209,10 +210,119 @@ class chooseSave extends JFrame {
             JLabel imageLabel = new JLabel();
             imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-            ImageIcon petIcon = new ImageIcon("Sprites" + File.separator + g.loadedPet.getType()+ ".png");
-            Image scaled = petIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+            // Get pet picture from saveslots
+            int targetLineNumber = i * 2; // A1 = line 0, A3 = line 2, A5 = line 4
+            String petSpriteFilePath = "";
+            switch (i){
+                case 0:
+                    try (BufferedReader reader = new BufferedReader(new FileReader("GameSaves.csv"))) {
+                        String line = "";
+                        for (int j = 0; j <= targetLineNumber; j++){
+                            line = reader.readLine();
+                        }
+                        String[] parts = line.split("/");
+                        String SavePetType = parts[3].toLowerCase();
+
+                        switch (SavePetType) {
+                        case "cat":
+                            petSpriteFilePath = "Sprites" + File.separator + "catSprites" + File.separator + "catNORMAL.png";
+                            break;
+                        case "bowser":
+                            petSpriteFilePath = "Sprites" + File.separator + "bowserSprites" + File.separator + "bowserNORMAL.png";
+                            break;
+                        case "ryu":
+                            petSpriteFilePath = "Sprites" + File.separator + "ryuSprites" + File.separator + "ryuNORMAL.png";
+                            break;
+                        default:
+
+                            break;
+                        }
+                    } 
+                    catch (ArrayIndexOutOfBoundsException e) {
+                        break;
+                    }
+                    catch (IOException e) {
+                        System.out.println("could not read gamesaves file");
+                        e.printStackTrace();
+                    }
+                    break;
             
 
+                case 1:
+                try (BufferedReader reader = new BufferedReader(new FileReader("GameSaves.csv"))) {
+                    String line = "";
+                    for (int j = 0; j <= targetLineNumber; j++){
+                        line = reader.readLine();
+                    }
+                    String[] parts = line.split("/");
+                    String SavePetType = parts[3].toLowerCase();
+
+                    switch (SavePetType) {
+                    case "cat":
+                        petSpriteFilePath = "Sprites" + File.separator + "catSprites" + File.separator + "catNORMAL.png";
+                        break;
+                    case "bowser":
+                        petSpriteFilePath = "Sprites" + File.separator + "bowserSprites" + File.separator + "bowserNORMAL.png";
+                        break;
+                    case "ryu":
+                        petSpriteFilePath = "Sprites" + File.separator + "ryuSprites" + File.separator + "ryuNORMAL.png";
+                        break;
+                    default:
+
+                        break;
+                    }
+                }
+                catch (ArrayIndexOutOfBoundsException e) {
+                    break;
+                }
+                catch (IOException e) {
+                    System.out.println("could not read gamesaves file");
+                    e.printStackTrace();
+                }
+                    break;
+                case 2:
+                
+                    try (BufferedReader reader = new BufferedReader(new FileReader("GameSaves.csv"))) {
+                        String line = "";
+                        for (int j = 0; j <= targetLineNumber; j++){
+                            line = reader.readLine();
+                        }
+                        String[] parts = line.split("/");
+
+                        System.out.println(parts);
+                        String SavePetType = parts[3].toLowerCase();
+                        
+
+                        switch (SavePetType) {
+                        case "cat":
+                            petSpriteFilePath = "Sprites" + File.separator + "catSprites" + File.separator + "catNORMAL.png";
+                            break;
+                        case "bowser":
+                            petSpriteFilePath = "Sprites" + File.separator + "bowserSprites" + File.separator + "bowserNORMAL.png";
+                            break;
+                        case "ryu":
+                            petSpriteFilePath = "Sprites" + File.separator + "ryuSprites" + File.separator + "ryuNORMAL.png";
+                            break;
+                        default:
+
+                            break;
+                        }
+                    }
+                    catch (ArrayIndexOutOfBoundsException e) {
+                        break;
+                    }
+                    catch (IOException e) {
+                        System.out.println("could not read gamesaves file");
+                        e.printStackTrace();
+                    }
+                    break;
+
+            }
+    
+            // Load the image
+            ImageIcon petIcon = new ImageIcon(getClass().getResource(petSpriteFilePath));
+            Image scaled = petIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+            
             imageLabel.setIcon(new ImageIcon(scaled));
 
             // Pet Type Label
@@ -235,12 +345,6 @@ class chooseSave extends JFrame {
             mainPanel.add(slotPanel);
         }
         
-        
-        
-        System.out.println("TESTING SPOT A");
-
-
-
         add(mainPanel, BorderLayout.CENTER);
         setVisible(true);
     }
@@ -325,21 +429,21 @@ class createPet extends JFrame {
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
 
         JPanel nameFieldPanel = new JPanel();
-nameFieldPanel.setLayout(new BoxLayout(nameFieldPanel, BoxLayout.X_AXIS));
-nameFieldPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        nameFieldPanel.setLayout(new BoxLayout(nameFieldPanel, BoxLayout.X_AXIS));
+        nameFieldPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-JLabel nameLabel = new JLabel("Name:");
-nameLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
-nameLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+        JLabel nameLabel = new JLabel("Name:");
+        nameLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        nameLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 
-JTextField textField = new JTextField();
-textField.setMaximumSize(new Dimension(300, 30));
+        JTextField textField = new JTextField();
+        textField.setMaximumSize(new Dimension(300, 30));
 
-nameFieldPanel.add(nameLabel);
-nameFieldPanel.add(textField);
+        nameFieldPanel.add(nameLabel);
+        nameFieldPanel.add(textField);
 
-JButton submitButton = new JButton("Submit");
-submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton submitButton = new JButton("Submit");
+        submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
         submitButton.addActionListener(e -> {
@@ -491,15 +595,11 @@ class GameWindow extends JFrame {
         Commands c = new Commands(g.loadedPet);
         
         JPanel itemPanel = new JPanel(new GridLayout(3, 3, 10, 10));
-        // Top panel with title and save button, and inventory button
 
-        
+        // Top panel with title and save button, and inventory button
         JPanel topPanel = new JPanel(new BorderLayout());
         JLabel titleLabel = new JLabel(c.pet.getName(), SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-
-
-
 
         topPanel.add(titleLabel, BorderLayout.CENTER);
         JButton saveButton = new JButton("Save");
@@ -539,8 +639,6 @@ class GameWindow extends JFrame {
         petLabel.setHorizontalAlignment(SwingConstants.CENTER);
         petLabel.setIcon(new ImageIcon(petSprite.getDisplayedSprite()));
         centerPanel.add(petLabel);
-
-        
 
         // Right: Health bars
         JPanel statsPanel = new JPanel(new GridLayout(4, 1, 5, 5));
@@ -641,10 +739,7 @@ class GameWindow extends JFrame {
                 petLabel.setIcon(new ImageIcon(petSprite.getDisplayedSprite()));
             }
         });
-        flipTimer.start();
-
-
-        
+        flipTimer.start();        
     }
 
     /**

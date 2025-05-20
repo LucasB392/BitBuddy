@@ -244,20 +244,21 @@ public class Pet {
      * @param time which will increase during gameplay
      */
     public void petCounter(long time) {
+
         // Only reduce sleep if the pet is not sleeping.
         if (!getStatus().equalsIgnoreCase("Sleeping") && time - sleepCounter >= 3000) {
-            sleep = Math.max(0, sleep - 10);
+            sleep = Math.max(0, sleep - 4);
             sleepCounter = time;
         }
 
         if (time - hungerCounter >= 4000) {
-            hunger = Math.max(0, hunger - 10);
+            hunger = Math.max(0, hunger - 4);
             hungerCounter = time;
         }
 
         // Health declines if hunger or sleep is low
         if (hunger < 30 || sleep < 30) {
-            health = Math.max(0, health - 2);
+            health = Math.max(0, health - 1);
         }
 
         // Happiness declines if hunger or sleep is low
